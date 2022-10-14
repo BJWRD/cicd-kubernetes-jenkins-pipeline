@@ -32,37 +32,43 @@ After running the container you should be able to access the Jenkins application
 Initially you will notice that you are presented with a 'Unlock Jenkins' screen. To retrieve the requested 'Administrator password' you will need to enter the following docker command below to view the container logs and locate the password -
       
       docker logs <containerID>
-      
-ENTER IMAGE of LOGS and Password 
+
+Example:
+
+<img width="656" alt="image" src="https://user-images.githubusercontent.com/83971386/195887709-16190167-11f1-405a-adf5-6e2537b0d7ae.png">
 
 Once retrieved, copy and paste the password into the 'Administrator password' field -
 
-ENTER IMAGE of Jenkins Screen
+<img width="848" alt="image" src="https://user-images.githubusercontent.com/83971386/195887952-7930b373-175c-4d99-81d6-31187fc86807.png">
 
 ###   3. Customize Jenkins
 Select 'Install suggested plugins' and wait for the completed installation -
 
-ENTER IMAGE of screen
+<img width="871" alt="image" src="https://user-images.githubusercontent.com/83971386/195888092-df15273c-bb37-4534-8af5-05bea6a46e3e.png">
 
 Note: In the instance all of the plugins fail, you may need to enter the following commands to ensure a HTTP connection is established rather than HTTPS when pulling the Jenkins plugins -
 
       docker exec -it <containerID> bash
       sed -i 's/https/http/g' /var/jenkins_home/hudson.model.UpdateCenter.xml 
-      
-ENTER IMAGE OF Update
+ 
+ Example:
+ 
+<img width="704" alt="image" src="https://user-images.githubusercontent.com/83971386/195888177-aad8e0a2-8aa5-41ed-b440-6a039e70244f.png">
 
 ###   4. Creating Jenkins Admin User
 You will then be presented with the following 'Create First Admin User' screen, enter details relevant to yourself and select 'Continue'.
 
-ENTER IMAGE of Admin user screen
+<img width="781" alt="image" src="https://user-images.githubusercontent.com/83971386/195888296-ab95b2c2-dfce-4dc2-b50d-69b861c9bffe.png">
 
 ## Install Docker Pipeline Plugin 
 From the Jenkins Dashboard, select the 'Manage Jenkins' option on the left-hand side, followed by 'Manage Plugins' and then the 'Available Plugins' widget.
 
 Within the Search field, enter 'Docker Pipeline' and select the 'Install without restart'button -
 
-ENTER IMAGE 1
-ENTER IMAGE 2
+<img width="731" alt="image" src="https://user-images.githubusercontent.com/83971386/195888404-2d7a605d-8bec-4e0b-9c3c-819ddcbf55b1.png">
+
+<img width="371" alt="image" src="https://user-images.githubusercontent.com/83971386/195888471-8d6fcb01-742b-46cd-8bdb-f3549ee1b3d9.png">
+
 
 ## Create a Jenkins pipeline
 
