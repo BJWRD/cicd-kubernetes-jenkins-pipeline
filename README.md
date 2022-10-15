@@ -74,21 +74,22 @@ Before we begin with the Pipeline creation, we will need to add our Docker Hub c
 
 Select 'Manage Jenkins' -
 
-ENTER IMAGE
+<img width="199" alt="image" src="https://user-images.githubusercontent.com/83971386/195980344-fe6f3028-c6b8-4cb1-860e-ab23c5c40356.png">
 
 Followed by 'Manage Credentials' - 
 
-ENTER IMAGE 
+<img width="636" alt="image" src="https://user-images.githubusercontent.com/83971386/195980368-bb7bb47c-8cd3-4206-a55e-cd642a133372.png">
 
 Select the 'Global' hyperlink -
 
-ENTER IMAGE
+<img width="460" alt="image" src="https://user-images.githubusercontent.com/83971386/195980385-58b72a3f-ef3a-41cc-b18d-4b3786f5d5ce.png">
 
 And then click on 'Add Credentials', from here you can populate the following screen with your Docker Hub login credentials and save -
 
-ENTER IMAGE 1
+<img width="1213" alt="image" src="https://user-images.githubusercontent.com/83971386/195980417-df538493-b935-4331-9533-cdac898a1be7.png">
 
-ENTER IMAGE 2
+Example:
+<img width="1218" alt="image" src="https://user-images.githubusercontent.com/83971386/195980445-ae882dca-9f39-4c1f-8149-87f4194be0fb.png">
 
 ## Create a Jenkins pipeline
 Within the Jenkins Dashboard select the 'New Item' option on the left-hand side, followed by 'Create a Job' -
@@ -101,18 +102,18 @@ ENTER IMAGE
 
 Scroll down to the 'Pipeline' section and select the following Pipeline definition and copy and paste your Jenkinsfile contents within the Script field -
 
-ENTER IMAGE11
+<img width="957" alt="image" src="https://user-images.githubusercontent.com/83971386/195980578-6fcb2033-6a24-4357-b6bd-0087330cedea.png">
 
 Click 'Save' with the 'Groovy Sandbox' tickbox selected.
 
-NOTE: if your Jenkinsfile exists within your GitHub repo, you can also select the following definition which saves you from copying and pasting the contents within the 'Pipeline Script' field -
+NOTE: if your Jenkinsfile exists within your GitHub repo, you can also select the following SCM definition which saves you from copying and pasting the contents within the 'Pipeline Script' field -
 
-ENTER IMAGE 
+<img width="854" alt="image" src="https://user-images.githubusercontent.com/83971386/195980550-5e835589-94f9-4db0-b1a8-3ddcb1814b5e.png">
 
 ## Deploy Kubernetes using Jenkins Pipeline
 Now we have a created Pipeline, we can finally select 'Build Now' to set the Pipeline build process in motion -
 
-ENTER IMAGE - Build Now
+<img width="299" alt="image" src="https://user-images.githubusercontent.com/83971386/195980605-784997cc-ad2d-4951-bfd4-15ac2b798619.png">
 
 
 ## List of tools/services used
