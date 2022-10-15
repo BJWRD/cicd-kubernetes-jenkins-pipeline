@@ -69,15 +69,50 @@ Within the Search field, enter 'Docker Pipeline' and select the 'Install without
 
 <img width="371" alt="image" src="https://user-images.githubusercontent.com/83971386/195888471-8d6fcb01-742b-46cd-8bdb-f3549ee1b3d9.png">
 
+## Adding Credentials
+Before we begin with the Pipeline creation, we will need to add our Docker Hub credentials to our Jenkins profile.
+
+Select 'Manage Jenkins' -
+
+ENTER IMAGE
+
+Followed by 'Manage Credentials' - 
+
+ENTER IMAGE 
+
+Select the 'Global' hyperlink -
+
+ENTER IMAGE
+
+And then click on 'Add Credentials', from here you can populate the following screen with your Docker Hub login credentials and save -
+
+ENTER IMAGE 1
+
+ENTER IMAGE 2
 
 ## Create a Jenkins pipeline
+Within the Jenkins Dashboard select the 'New Item' option on the left-hand side, followed by 'Create a Job' -
 
-      
-## How to Apply/Destroy
-This section details the deployment and teardown of the cicd-kubernetes-jenkins-pipeline architecture. 
+ENTER IMAGE
+
+You will then be presented with multiple items which can be created. We will need to enter an item name, followed by the Pipeline selection -
+
+ENTER IMAGE
+
+Scroll down to the 'Pipeline' section and select the following Pipeline definition and copy and paste your Jenkinsfile contents within the Script field -
+
+ENTER IMAGE11
+
+Click 'Save' with the 'Groovy Sandbox' tickbox selected.
+
+NOTE: if your Jenkinsfile exists within your GitHub repo, you can also select the following definition which saves you from copying and pasting the contents within the 'Pipeline Script' field -
+
+ENTER IMAGE 
 
 ## Deploy Kubernetes using Jenkins Pipeline
+Now we have a created Pipeline, we can finally select 'Build Now' to set the Pipeline build process in motion -
 
+ENTER IMAGE - Build Now
 
 
 ## List of tools/services used
