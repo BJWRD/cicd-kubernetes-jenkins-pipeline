@@ -4,7 +4,6 @@ RUN apt-get update \
     && apt-get install -y python3 \
     && apt-get install -y python3-pip \
     && pip install flask \
-    && pip install pytest \
     && pip install flake8
 
 #Copy the app.py file from the current folder to /opt inside the container
