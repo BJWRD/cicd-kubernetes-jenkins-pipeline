@@ -70,7 +70,8 @@ Within the Search field, enter 'Docker Pipeline' and select the 'Install without
 <img width="371" alt="image" src="https://user-images.githubusercontent.com/83971386/195888471-8d6fcb01-742b-46cd-8bdb-f3549ee1b3d9.png">
 
 ## Adding Credentials
-Before we begin with the Pipeline creation, we will need to add our Docker Hub credentials to our Jenkins profile.
+###   1. Adding Docker Hub Credentials
+Before we begin with the Pipeline creation, we will need to add our Docker Hub and Git credentials to our Jenkins profile.
 
 Select 'Manage Jenkins' -
 
@@ -90,6 +91,11 @@ And then click on 'Add Credentials', from here you can populate the following sc
 
 Example:
 <img width="1218" alt="image" src="https://user-images.githubusercontent.com/83971386/195980445-ae882dca-9f39-4c1f-8149-87f4194be0fb.png">
+
+###   2. Adding Git Credentials
+Repeat the steps above, and enter your Git related details. See below -
+
+ENTER IMAGE GIT
 
 ## Create a Jenkins pipeline
 Within the Jenkins Dashboard select the 'New Item' option on the left-hand side, followed by 'Create a Job' -
