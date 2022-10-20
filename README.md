@@ -2,31 +2,32 @@
 Within this project we will be building and deploying a [Python Flask](http://flask.pocoo.org/) web application using a [Jenkins](https://www.jenkins.io/) CICD Pipeline, [Kubernetes](https://kubernetes.io/) as the container orchestrator, [Docker](https://www.docker.com/) as the application host and [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/) as a service to ensure the application is externally accessible. 
 
 ## Architecture
-This K8s architecture consists of one Node and one Pods using Deployment and the NodePort service for external site accessibility. The Node will reside within the Namespace `flask-namespace` and the bulk of the configuration can be found within the `kubernetes-docker-python-flask.yml`.
+This architecture displays the Pipeline Checkout, Build, Test, Push, and Deployment process.
 
-<img width="627" alt="image" src="https://user-images.githubusercontent.com/83971386/194745323-024095ca-8e8a-4f27-9482-ae5905dd556f.png">
+![image](https://user-images.githubusercontent.com/83971386/196981954-6ad2de21-ddcd-4bec-8fad-335bbc18af2f.png)
 
 ## Prerequisites
 * Minikube installation - [steps](https://minikube.sigs.k8s.io/docs/start/)
-* Virtualbox installation - [steps](https://www.virtualbox.org/wiki/Downloads)
 * Docker installation - [steps](https://docs.docker.com/engine/install/)
+* Docker-Compose setup - [steps](https://docs.docker.com/compose/)
+* Virtualbox installation - [steps](https://www.virtualbox.org/wiki/Downloads) 
+* VM Requirements: 4 CPU, 10GB Diskspace
 
 ## Build Process
 This section details the steps required to deploy the Python Flask Web application via Kubernetes/Docker using a Jenkins CI/CD Pipeline.
 
 ## Install Jenkins
-###   1. Run Jenkins Container
-Before we begin the Jenkins Installation, we need to ensure that docker has been installed on the VM you are using. Please follow the steps within the 'Prerequisites - Docker Installation' section to get started.
-
-Once Docker has been installed, execute the following Docker run command to start out Jenkins container in detatched mode. This will host our Jenkins Pipeline.
-
-      docker run -u 0 --privileged --name jenkins -it -d -p 8080:8080 -p 5000:5000 \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      -v $(which docker):/usr/bin/docker \
-      -v /home/jenkins_home:/var/jenkins_home \
-      jenkins/jenkins:latest
+###   1. Clone the Git Repository
+      git clone https://github.com/BJWRD/cicd-kubernetes-jenkins-pipeline
       
-###   2. Unlocking Jenkins
+###   2. Run Jenkins Container
+Before we begin the Jenkins Installation, we need to ensure that Docker and Docker-Compose has been installed on the VM you are using. Please follow the steps within the 'Prerequisites' section to get started.
+
+Once Docker and Docker-Compose has been installed, execute the following Docker-Compose command to start out Jenkins container in detatched mode. This will host our Jenkins Pipeline.
+
+      docker-compose up -d
+      
+###   3. Unlocking Jenkins
 After running the container you should be able to access the Jenkins application via web browser using ```http://localhost:8080``` or ```http://<host_ip>:8080```.
 
 Initially you will notice that you are presented with a 'Unlock Jenkins' screen. To retrieve the requested 'Administrator password' you will need to enter the following docker command below to view the container logs and locate the password -
@@ -41,7 +42,7 @@ Once retrieved, copy and paste the password into the 'Administrator password' fi
 
 <img width="848" alt="image" src="https://user-images.githubusercontent.com/83971386/195887952-7930b373-175c-4d99-81d6-31187fc86807.png">
 
-###   3. Customize Jenkins
+###   4. Customize Jenkins
 Select 'Install suggested plugins' and wait for the completed installation -
 
 <img width="871" alt="image" src="https://user-images.githubusercontent.com/83971386/195888092-df15273c-bb37-4534-8af5-05bea6a46e3e.png">
@@ -55,7 +56,7 @@ Note: In the instance all of the plugins fail, you may need to enter the followi
  
 <img width="704" alt="image" src="https://user-images.githubusercontent.com/83971386/195888177-aad8e0a2-8aa5-41ed-b440-6a039e70244f.png">
 
-###   4. Creating Jenkins Admin User
+###   5. Creating Jenkins Admin User
 You will then be presented with the following 'Create First Admin User' screen, enter details relevant to yourself and select 'Continue'.
 
 <img width="781" alt="image" src="https://user-images.githubusercontent.com/83971386/195888296-ab95b2c2-dfce-4dc2-b50d-69b861c9bffe.png">
@@ -92,11 +93,6 @@ And then click on 'Add Credentials', from here you can populate the following sc
 Example:
 <img width="1218" alt="image" src="https://user-images.githubusercontent.com/83971386/195980445-ae882dca-9f39-4c1f-8149-87f4194be0fb.png">
 
-###   2. Adding Git Credentials
-Repeat the steps above, and enter your Git related details. See below -
-
-ENTER IMAGE GIT
-
 ## Create a Jenkins pipeline
 Within the Jenkins Dashboard select the 'New Item' option on the left-hand side, followed by 'Create a Job' -
 
@@ -106,7 +102,66 @@ You will then be presented with multiple items which can be created. We will nee
 
 ENTER IMAGE
 
-Scroll down to the 'Pipeline' section and select the following Pipeline definition and copy and paste your Jenkinsfile contents within the Script field -
+Scroll down to the 'Pipeline' section and select the following Pipeline definition and copy and paste the Jenkinsfile contents within the Script field -
+
+     pipeline {
+      agent any
+
+      environment {
+        DOCKER_HUB_REPO = "bjwrd/app.py"
+        CONTAINER_NAME = "flask-webapp"
+      }
+  
+     stages {
+      stage('Checkout Source') {
+                 steps {
+                   checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/BJWRD/cicd-kubernetes-jenkins-pipeline']]])
+                 }
+      }
+
+    
+      stage('Building Image') {
+        steps {
+         script {
+          echo 'Building Image...'
+          sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
+         }
+        }
+       }
+
+      stage('Test') {
+        steps {
+            echo 'Testing..'
+            sh 'docker stop $CONTAINER_NAME || true'
+            sh 'docker rm $CONTAINER_NAME || true'
+            sh 'docker run -d --name $CONTAINER_NAME $DOCKER_HUB_REPO'
+            sh 'docker exec $(docker ps -q -f name=flask-webapp) bash -c "flake8 /opt/app.py"'
+        }
+      }
+
+      stage('Pushing Image') {
+        environment {
+               registryCredential = 'dockerhublogin'
+        }
+        steps {
+         script {
+          echo 'Pushing Image...'
+          withDockerRegistry([ credentialsId: "dockerhublogin", url: "" ]) {
+          sh 'docker push $DOCKER_HUB_REPO:latest'
+          }
+        }
+      }
+    }
+
+      stage('Deploying App to Kubernetes') {
+        steps {
+          echo 'Deploying Image...'
+          sh 'kubectl create -f namespace.yml'
+          sh 'kubectl create -f cicd-kubernetes-jenkins-pipeline.yml'
+        }
+      }
+     }
+    }
 
 <img width="957" alt="image" src="https://user-images.githubusercontent.com/83971386/195980578-6fcb2033-6a24-4357-b6bd-0087330cedea.png">
 
@@ -121,6 +176,11 @@ Now we have a created Pipeline, we can finally select 'Build Now' to set the Pip
 
 <img width="299" alt="image" src="https://user-images.githubusercontent.com/83971386/195980605-784997cc-ad2d-4951-bfd4-15ac2b798619.png">
 
+ENTER SUCCESSFUL BUILD IMAGE 
+
+The Pipeline has successfully gone through the build, test, push and deployment phases and the web application should now be accessible -
+
+ENTER SUCCESSFUL WEB APP IMAGE 
 
 ## List of tools/services used
 * [Jenkins](https://www.jenkins.io/)
@@ -131,3 +191,4 @@ Now we have a created Pipeline, we can finally select 'Build Now' to set the Pip
 * [K8s Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 * [Services- NodePort](https://kubernetes.io/docs/concepts/services-networking/service/)
 * [Draw.io](https://www.draw.io/index.html)
+* [Python Flask](https://pythonbasics.org/what-is-flask-python/)
