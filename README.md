@@ -96,11 +96,11 @@ Example:
 ## Create a Jenkins pipeline
 Within the Jenkins Dashboard select the 'New Item' option on the left-hand side, followed by 'Create a Job' -
 
-ENTER IMAGE
+<img width="223" alt="1 - New Item" src="https://user-images.githubusercontent.com/83971386/197384409-4d65faf6-31fb-4bfe-bb75-00ed80b97454.png">
 
 You will then be presented with multiple items which can be created. We will need to enter an item name, followed by the Pipeline selection -
 
-ENTER IMAGE
+<img width="1147" alt="2 - pipeline" src="https://user-images.githubusercontent.com/83971386/197384404-194b3c1d-7942-4451-b797-1b0462e678f7.png">
 
 Scroll down to the 'Pipeline' section and select the following Pipeline definition and copy and paste the Jenkinsfile contents within the Script field -
 
@@ -176,11 +176,11 @@ Now we have a created Pipeline, we can finally select 'Build Now' to set the Pip
 
 <img width="299" alt="image" src="https://user-images.githubusercontent.com/83971386/195980605-784997cc-ad2d-4951-bfd4-15ac2b798619.png">
 
-ENTER SUCCESSFUL BUILD IMAGE 
+<img width="437" alt="3 - build" src="https://user-images.githubusercontent.com/83971386/197384395-6ede5a56-0192-48f8-a365-c2ea3d21f1fb.png">
 
 The Pipeline has successfully gone through the build, test, push and deployment phases and the web application should now be accessible -
 
-ENTER SUCCESSFUL WEB APP IMAGE 
+      curl http://<MiniKubeIP>:Port
 
 ## List of tools/services used
 * [Jenkins](https://www.jenkins.io/)
