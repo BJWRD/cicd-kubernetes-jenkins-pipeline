@@ -7,14 +7,14 @@ pipeline {
   }
   
   stages {
-    stage('Checkout Source') {
+    stage('Checkout') {
            steps {
                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/BJWRD/cicd-kubernetes-jenkins-pipeline']]])
             }
     }
 
     
-    stage('Building Image') {
+    stage('Build') {
       steps {
         script {
          echo 'Building Image...'
@@ -33,10 +33,7 @@ pipeline {
         }
     }
 
-    stage('Pushing Image') {
-        environment {
-               registryCredential = 'dockerhublogin'
-           }
+    stage('Push') {
       steps {
         script {
           echo 'Pushing Image...'
@@ -47,7 +44,7 @@ pipeline {
       }
     }
 
-    stage('Deploying App to Kubernetes') {
+    stage('Deploy') {
       steps {
         echo 'Deploying Image...'
         sh 'kubectl create -f namespace.yml'
