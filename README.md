@@ -18,15 +18,17 @@ This section details the steps required to deploy the Python Flask Web applicati
 
 ## Install Jenkins
 ###   1. Clone the Git Repository
+      yum install git -y
+      cd /home
       git clone https://github.com/BJWRD/cicd-kubernetes-jenkins-pipeline
+      cd cicd-kubernetes-jenkins-pipeline
+      cd Jenkins\ Resources/
       
 ###   2. Run Jenkins Container
 Before we begin the Jenkins Installation, we need to ensure that Docker and Docker-Compose has been installed on the VM you are using. Please follow the steps within the 'Prerequisites' section to get started.
 
 Once Docker and Docker-Compose has been installed, execute the following Docker-Compose command to start out Jenkins container in detatched mode. This will host our Jenkins Pipeline.
       
-      cd cicd-kubernetes-jenkins-pipeline
-      cd Jenkins\ Resources/
       docker-compose up -d
       
 ###   3. Unlocking Jenkins
